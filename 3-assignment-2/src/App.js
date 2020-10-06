@@ -4,53 +4,58 @@ import CharComponent from "./CharComponent/CharComponent";
 
 class App extends React.Component {
   state = {
-    inputLength: 0,
     enteredString: "",
-    stringArray: [],
   };
 
   handleInput = (event) => {
     this.setState({
-      inputLength: event.target.value.length,
       enteredString: event.target.value,
-      stringArray: event.target.value.split(""),
     });
   };
 
   deleteCharHandler = (charIndex) => {
-    const stringArray = [...this.state.stringArray];
-    stringArray.splice(charIndex, 1);
+    const text = this.state.enteredString.split('');
+    text.splice(charIndex, 1);
+    const updatedText = text.join('');
     this.setState({
-      stringArray,
-      enteredString: stringArray.join(""),
-      inputLength: stringArray.join("").length,
+      enteredString: updatedText,
     });
   };
 
   render() {
-    let characters = null;
+    // let characters = null;
 
-    if (this.state.inputLength) {
-      characters = (
-        <div>
-          {this.state.stringArray.map((char, index) => {
-            return (
-              <CharComponent
-                key={index}
-                char={char}
-                click={() => this.deleteCharHandler(index)}
-              />
-            );
-          })}
-        </div>
+    // if (this.state.enteredString) {
+    //   characters = (
+    //     <div>
+    //       {this.state.stringArray.map((char, index) => {
+    //         return (
+    //           <CharComponent
+    //             key={index}
+    //             char={char}
+    //             click={() => this.deleteCharHandler(index)}
+    //           />
+    //         );
+    //       })}
+    //     </div>
+    //   );
+    // }
+
+    const characters = this.state.enteredString.split('').map((ch, index) => {
+      return (
+        <CharComponent key={index} char={ch} click={() => this.deleteCharHandler(index)} />
       );
-    }
+    });
 
     return (
       <div>
-        <input type="text" value={this.state.enteredString} onChange={(event) => this.handleInput(event)} />
-        <p>{this.state.inputLength}</p>
-        <ValidationComponent length={this.state.inputLength} />
+        <input
+          type="text"
+          value={this.state.enteredString}
+          onChange={(event) => this.handleInput(event)}
+        />
+        <p>{this.state.enteredString.length}</p>
+        <ValidationComponent length={this.state.enteredString.length} />
         {characters}
       </div>
     );

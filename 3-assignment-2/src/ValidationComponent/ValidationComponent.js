@@ -4,14 +4,14 @@ const ValidationComponent = (props) => {
   let renderValidation = null;
 
   if (props.length <= 5) {
-    renderValidation = <div>Text too short</div>;
-  } else if (props.length > 5) {
-    renderValidation = <div>Text long enough</div>;
+    renderValidation = <p>Text too short</p>;
+  } else {
+    renderValidation = <p>Text long enough</p>;
   }
 
   return (
     <div>
-      <p>{renderValidation}</p>
+      <div>{renderValidation}</div>
     </div>
   );
 };
