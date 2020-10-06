@@ -14,9 +14,9 @@ class App extends React.Component {
   };
 
   deleteCharHandler = (charIndex) => {
-    const text = this.state.enteredString.split('');
+    const text = this.state.enteredString.split("");
     text.splice(charIndex, 1);
-    const updatedText = text.join('');
+    const updatedText = text.join("");
     this.setState({
       enteredString: updatedText,
     });
@@ -41,9 +41,13 @@ class App extends React.Component {
     //   );
     // }
 
-    const characters = this.state.enteredString.split('').map((ch, index) => {
+    const characters = this.state.enteredString.split("").map((ch, index) => {
       return (
-        <CharComponent key={index} char={ch} click={() => this.deleteCharHandler(index)} />
+        <CharComponent
+          key={index}
+          char={ch}
+          click={() => this.deleteCharHandler(index)}
+        />
       );
     });
 

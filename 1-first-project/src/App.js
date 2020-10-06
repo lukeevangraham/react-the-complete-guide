@@ -1,6 +1,21 @@
 import React from "react";
 import Person from "./Person/Person";
+import styled from "styled-components";
 import "./App.css";
+
+const StyledButton = styled.button`
+      background-color: ${(props) => (props.alt ? "red" : "green")};
+      color: white;
+      font: inherit;
+      border: 1px solid blue;
+      padding: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: ${(props) => (props.alt ? "salmon" : "lightgreen")};
+        color: black;
+      },
+`;
 
 class App extends React.Component {
   state = {
@@ -31,8 +46,7 @@ class App extends React.Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState({ persons })
-
+    this.setState({ persons });
   };
 
   togglePersonsHandler = () => {
@@ -41,13 +55,18 @@ class App extends React.Component {
   };
 
   render() {
-    const style = {
-      backgroundColor: "white",
-      font: "inherit",
-      border: "1px solid blue",
-      padding: "8px",
-      cursor: "pointer",
-    };
+    // const style = {
+    //   backgroundColor: "green",
+    //   color: "white",
+    //   font: "inherit",
+    //   border: "1px solid blue",
+    //   padding: "8px",
+    //   cursor: "pointer",
+    //   ":hover": {
+    //     backgroundColor: "lightgreen",
+    //     color: "black",
+    //   },
+    // };
 
     let persons = null;
 
@@ -67,14 +86,32 @@ class App extends React.Component {
           })}
         </div>
       );
+
+      // style.backgroundColor = "red";
+      // style[":hover"] = {
+      //   backgroundColor: "salmon",
+      //   color: "black",
+      // };
+    }
+
+    const classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
     }
 
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
-        <button style={style} onClick={this.togglePersonsHandler}>
+        <p className={classes.join(" ")}>This is really working!</p>
+        <StyledButton
+          alt={this.state.showPersons}
+          onClick={this.togglePersonsHandler}
+        >
           Toggle Persons
-        </button>
+        </StyledButton>
         {persons}
       </div>
     );
