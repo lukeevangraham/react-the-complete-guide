@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Only runs in production
+
 class ErrorBoundary extends React.Component {
     state = {
         hasError: false,
