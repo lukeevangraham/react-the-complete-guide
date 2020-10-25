@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, NavLink, Switch, Redirect } from "react-router-dom";
+import { Route, NavLink, Switch, Redirect } from "react-router-dom";
 
 import Course from './containers/Course/Course'
 import Courses from "./containers/Courses/Courses";
@@ -10,16 +10,21 @@ import classes from "./App.module.css";
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter>
         <div className={classes.App}>
           <header>
             <nav>
               <ul>
                 <li>
-                  <NavLink to="/courses">Courses</NavLink>
+                  <NavLink to="/courses" activeClassName="active" activeStyle={{
+                    color: 'red',
+                    textDecoration: 'underline'
+                  }}>Courses</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/users">Users</NavLink>
+                  <NavLink to="/users" activeClassName="active" activeStyle={{
+                    color: 'red',
+                    textDecoration: 'underline'
+                  }}>Users</NavLink>
                 </li>
               </ul>
             </nav>
@@ -43,7 +48,6 @@ class App extends React.Component {
           <li>Redirect requests to /all-courses to /courses (=> Your "Courses" page)</li>
         </ol> */}
         </div>
-      </BrowserRouter>
     );
   }
 }
