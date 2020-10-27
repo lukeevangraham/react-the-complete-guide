@@ -18,9 +18,10 @@ class ContactData extends React.Component {
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
-        valid: false
+        valid: false,
+        touched: false,
       },
       street: {
         elementType: "input",
@@ -30,9 +31,10 @@ class ContactData extends React.Component {
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
-        valid: false
+        valid: false,
+        touched: false,
       },
       zipCode: {
         elementType: "input",
@@ -42,9 +44,12 @@ class ContactData extends React.Component {
         },
         value: "",
         validation: {
-          required: true
+          required: true,
+          minLength: 5,
+          maxLength: 5,
         },
-        valid: false
+        valid: false,
+        touched: false,
       },
       country: {
         elementType: "input",
@@ -54,9 +59,10 @@ class ContactData extends React.Component {
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
-        valid: false
+        valid: false,
+        touched: false,
       },
       email: {
         elementType: "input",
@@ -66,9 +72,10 @@ class ContactData extends React.Component {
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
-        valid: false
+        valid: false,
+        touched: false,
       },
       deliveryMethody: {
         elementType: "select",
@@ -76,11 +83,14 @@ class ContactData extends React.Component {
           option: [
             { value: "fastest", displayValue: "Fastest" },
             { value: "cheapest", displayValue: "Cheapest" },
-          ]
+          ],
         },
-        value: ""
+        value: "fastest",
+        validation: {},
+        valid: true,
       },
     },
+    formIsValid: false,
     loading: false,
   };
 
@@ -112,11 +122,19 @@ class ContactData extends React.Component {
   };
 
   checkValidity(value, rules) {
-    let isValid = false;
+    let isValid = true;
     if (rules.required) {
-      isValid = value.trim() !== '';
+      isValid = value.trim() !== "" && isValid;
     }
-    return isValid
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+    return isValid;
   }
 
   inputChangedHandler = (event, inputIdentifier) => {
@@ -127,10 +145,18 @@ class ContactData extends React.Component {
       ...updatedOrderForm[inputIdentifier],
     };
     updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
+    updatedFormElement.valid = this.checkValidity(
+      updatedFormElement.value,
+      updatedFormElement.validation
+    );
+    updatedFormElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
-    console.log(updatedFormElement)
-    this.setState({ orderForm: updatedOrderForm });
+    // console.log(updatedFormElement);
+    let formIsValid = true;
+    for (let inputIdentifier in updatedOrderForm) {
+      formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+    }
+    this.setState({ orderForm: updatedOrderForm, formIsValid });
   };
 
   render() {
@@ -149,10 +175,15 @@ class ContactData extends React.Component {
             elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
             changed={(event) => this.inputChangedHandler(event, formElement.id)}
           />
         ))}
-        <Button btnType="Success">ORDER</Button>
+        <Button btnType="Success" disabled={!this.state.formIsValid}>
+          ORDER
+        </Button>
       </form>
     );
     if (this.state.loading) {
