@@ -13,7 +13,6 @@ class Orders extends React.Component {
   }
 
   render() {
-    console.log("HERE: ", this.props.orders);
     let orders = <Spinner />;
     if (!this.props.loading) {
       orders = this.props.orders.map((order) => (
