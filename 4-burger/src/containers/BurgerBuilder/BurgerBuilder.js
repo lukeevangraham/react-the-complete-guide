@@ -11,7 +11,7 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
 import axios from "../../axios-orders";
 
-class BurgerBuilder extends React.Component {
+export class BurgerBuilder extends React.Component {
   state = {
     // purchasable: false, //shows a modal or error
     purchasing: false, //shows a modal or error
@@ -69,7 +69,7 @@ class BurgerBuilder extends React.Component {
     if (this.props.isAuthenticated) {
       this.setState({ purchasing: true });
     } else {
-      this.props.onSetAuthRedirectPath('/checkout');
+      this.props.onSetAuthRedirectPath("/checkout");
       this.props.history.push("/auth");
     }
   };
