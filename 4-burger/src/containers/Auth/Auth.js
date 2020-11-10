@@ -7,7 +7,7 @@ import Input from "../../components/UI/Input/Input";
 import Spinner from "../../components/UI/Spinner/Spinner";
 
 import classes from "./Auth.module.css";
-import * as action from "../../store/actions/index";
+import * as actions from "../../store/actions/index";
 
 class Auth extends React.Component {
   state = {
@@ -46,7 +46,7 @@ class Auth extends React.Component {
 
   componentDidMount() {
     if (!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
-      this.props.onSetAuthRedirectPact();
+      this.props.onSetAuthRedirectPath();
     }
   }
 
@@ -163,8 +163,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onAuth: (email, password, isSignup) =>
-      dispatch(action.auth(email, password, isSignup)),
-    onSetAuthRedirectPact: () => dispatch(action.setAuthRedirectPath("/")),
+      dispatch(actions.auth(email, password, isSignup)),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };
 

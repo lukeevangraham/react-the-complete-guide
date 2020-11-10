@@ -13,7 +13,7 @@ import * as actions from "./store/actions/index";
 
 class App extends React.Component {
   componentDidMount() {
-    this.props.onTryAutoAignup();
+    this.props.onTryAutoSignup();
   }
 
   render() {
@@ -31,6 +31,7 @@ class App extends React.Component {
           <Route path="/checkout" component={Checkout} />
           <Route path="/orders" component={Orders} />
           <Route path="/logout" component={Logout} />
+          <Route path="/auth" component={Auth} />
           <Route path="/" component={BurgerBuilder} />
           <Redirect to="/" />
         </Switch>
@@ -52,7 +53,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onTryAutoAignup: () => dispatch(actions.authCheckState()),
+    onTryAutoSignup: () => dispatch(actions.authCheckState()),
   };
 };
 
