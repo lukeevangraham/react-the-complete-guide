@@ -27,7 +27,7 @@ const store = createStore(rootReducer, composeEnhancers(
 const app = (
   <Provider store={store}>
     <React.StrictMode>
-      <BrowserRouter basename="/react-burger/" >
+      <BrowserRouter >
         <App />
       </BrowserRouter>
     </React.StrictMode>
