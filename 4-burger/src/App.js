@@ -21,42 +21,43 @@ const Auth = React.lazy(() => {
 });
 
 const App = (props) => {
+  let { onTryAutoSignup } = props;
   useEffect(() => {
-    props.onTryAutoSignup()
-  }, [])
+    onTryAutoSignup();
+  }, [onTryAutoSignup]);
 
   // componentDidMount() {
   //   props.onTryAutoSignup();
   // }
 
+  let routes = (
+    <Switch>
+      <Route path="/auth" render={() => <Auth />} />
+      <Route path="/" component={BurgerBuilder} />
+      <Redirect to="/" />
+    </Switch>
+  );
 
-    let routes = (
+  if (props.isAuthenticated) {
+    routes = (
       <Switch>
+        <Route path="/checkout" render={() => <Checkout />} />
+        <Route path="/orders" render={() => <Orders />} />
+        <Route path="/logout" component={Logout} />
         <Route path="/auth" render={() => <Auth />} />
         <Route path="/" component={BurgerBuilder} />
         <Redirect to="/" />
       </Switch>
     );
-
-    if (props.isAuthenticated) {
-      routes = (
-        <Switch>
-          <Route path="/checkout" render={() => <Checkout />} />
-          <Route path="/orders" render={() => <Orders />} />
-          <Route path="/logout" component={Logout} />
-          <Route path="/auth" render={() => <Auth />} />
-          <Route path="/" component={BurgerBuilder} />
-          <Redirect to="/" />
-        </Switch>
-      );
-    }
-    return (
-      <div>
-        <Layout><Suspense fallback={<p>Loading...</p>}>{routes}</Suspense></Layout>
-      </div>
-    );
-
-}
+  }
+  return (
+    <div>
+      <Layout>
+        <Suspense fallback={<p>Loading...</p>}>{routes}</Suspense>
+      </Layout>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
