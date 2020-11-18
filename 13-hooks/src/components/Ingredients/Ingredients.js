@@ -21,15 +21,22 @@ const ingredientReducer = (currentIngredients, action) => {
 
 function Ingredients() {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const { isLoading, error, data, sendRequest } = useHttp();
+  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier, clear } = useHttp();
 
   // const [userIngredients, setUserIngredients] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState();
 
   useEffect(() => {
-    console.log("rendering ingredients", userIngredients);
-  }, [userIngredients]);
+    if (!isLoading && !error && reqIdentifier === 'REMOVE_INGREDIENT') {
+      dispatch({ type: "DELETE", id: reqExtra });
+    } else if (!isLoading && !error && reqIdentifier === 'ADD_INGREDIENT') {
+      dispatch({
+        type: "ADD",
+        ingredient: { id: data.name, ...reqExtra },
+      });
+    }
+  }, [data, reqExtra, reqIdentifier, isLoading, error]);
 
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
     // setUserIngredients(filteredIngredients);
@@ -40,6 +47,13 @@ function Ingredients() {
   }, []);
 
   const addIngredientHandler = useCallback((ingredient) => {
+    sendRequest(
+      "https://react-hooks-update-8a73b.firebaseio.com/ingredients.json",
+      "POST",
+      JSON.stringify(ingredient),
+      ingredient,
+      'ADD_INGREDIENT'
+    );
     // setIsLoading(true);
     // dispatchHttp({ type: "SEND" });
     // fetch("https://react-hooks-update-8a73b.firebaseio.com/ingredients.json", {
@@ -57,12 +71,12 @@ function Ingredients() {
     //     //   ...prevIngredients,
     //     //   { id: responseData.name, ...ingredient },
     //     // ]);
-    //     dispatch({
-    //       type: "ADD",
-    //       ingredient: { id: responseData.name, ...ingredient },
-    //     });
+        // dispatch({
+        //   type: "ADD",
+        //   ingredient: { id: responseData.name, ...ingredient },
+        // });
     //   });
-  }, []);
+  }, [sendRequest]);
 
   const removeIngredientHandler = useCallback(
     (ingredientID) => {
@@ -70,20 +84,18 @@ function Ingredients() {
       // dispatchHttp({ type: "SEND" });
       sendRequest(
         `https://react-hooks-update-8a73b.firebaseio.com/ingredients/${ingredientID}.json`,
-        "DELETE"
+        "DELETE",
+        null,
+        ingredientID,
+        'REMOVE_INGREDIENT'
       );
     },
     [sendRequest]
   );
 
-  const clearError = useCallback(() => {
-    // setError(null);
-    // dispatchHttp({ type: "CLEAR" });
-  }, []);
-
   return (
     <div className="App">
-      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
       <IngredientForm
         onAddIngredient={addIngredientHandler}
         loading={isLoading}
